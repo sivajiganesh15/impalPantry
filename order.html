@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Order</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+  <h2>☕ Order Your Drink</h2>
+
+  <input id="name" placeholder="Your Name">
+
+  <select id="beverage">
+    <option>Tea</option>
+    <option>Coffee</option>
+  </select>
+
+  <select id="time">
+    <option>10:30 AM</option>
+    <option>3:30 PM</option>
+  </select>
+
+  <button onclick="order()">Place Order</button>
+</div>
+
+<script>
+function order() {
+  fetch("https://script.google.com/macros/s/AKfycbyyjBZ4mLGqFS3HtKZKz2S5rLtR-8lAWiL0LgLsCnJraEqofdnVb7Zn_W4PmZrDEkwyFQ/exec", {
+    method: "POST",
+    body: JSON.stringify({
+      action: "order",
+      name: name.value,
+      beverage: beverage.value,
+      time: time.value
+    })
+  })
+  .then(res => res.text())
+  .then(msg => alert(msg));
+}
+</script>
+
+</body>
+</html>
