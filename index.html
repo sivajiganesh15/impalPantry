@@ -1,40 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
-<link rel="stylesheet" href="style.css">
+  <title>Pantry Login</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  
 <div class="container">
   <h2>🔐 Pantry Login</h2>
 
-  <input id="username" placeholder="Username">
-  <input id="password" type="password" placeholder="Password">
+  <input id="username" placeholder="Username" autocomplete="off">
+  <input id="password" type="password" placeholder="Password" autocomplete="off">
 
   <button onclick="login()">Login</button>
 </div>
 
 <script>
 function login() {
+
+  const usernameVal = document.getElementById("username").value;
+  const passwordVal = document.getElementById("password").value;
+
+  if (!usernameVal || !passwordVal) {
+    alert("Please enter username and password");
+    return;
+  }
+
   fetch("https://script.google.com/macros/s/AKfycbyyjBZ4mLGqFS3HtKZKz2S5rLtR-8lAWiL0LgLsCnJraEqofdnVb7Zn_W4PmZrDEkwyFQ/exec", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
       action: "login",
-      username: username.value,
-      password: password.value
+      username: usernameVal,
+      password: passwordVal
     })
   })
   .then(res => res.json())
   .then(data => {
+    console.log("Response:", data);
+
     if (data.status === "success") {
       localStorage.setItem("role", data.role);
-      window.location = data.role === "admin" ? "admin.html" : "order.html";
+
+      if (data.role === "admin") {
+        window.location.href = "admin.html";
+      } else {
+        window.location.href = "order.html";
+      }
+
     } else {
-      alert("Invalid login");
+      alert("Invalid login credentials");
     }
+  })
+  .catch(error => {
+    console.error("Error:", error);
+    alert("Server error. Please try again.");
   });
 }
 </script>
